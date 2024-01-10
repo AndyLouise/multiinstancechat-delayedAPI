@@ -1,4 +1,4 @@
-# API Documentation
+# Multi-Instance Chat Player Count API Documentation
 
 ### Overview
 This API is designed to enqueue and process requests to remove users from a chat system after a specified delay. It utilizes Express.js for handling HTTP requests and Axios for making HTTP requests to an external API.
