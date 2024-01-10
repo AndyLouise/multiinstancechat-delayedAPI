@@ -1,11 +1,11 @@
-const express = require('express');
-const axios = require('axios');
+import express, { json } from 'express';
+import { get } from 'axios';
 const app = express();
 const PORT = 3000;
 const delayTimeInMinutes = 5; // 4 minutes delay 
 
 // Middleware to parse JSON requests
-app.use(express.json());
+app.use(json());
 
 // Queue to store incoming requests
 const requestQueue = [];
@@ -13,7 +13,7 @@ const requestQueue = [];
 async function removeOldUsers(playersToRemove) {
   const url = 'https://multiinstancechat-production.up.railway.app/setUsers?auth=TDE4RkVN&action=remove&p=' + playersToRemove;
   try {
-    const response = await axios.get(url);
+    const response = await get(url);
     // Log the entire response object
     const occupantsCount = response.data;
     return occupantsCount;
