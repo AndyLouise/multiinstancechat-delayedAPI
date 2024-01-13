@@ -32,7 +32,7 @@ app.engine("html", require("ejs").renderFile);
 app.listen(config.port);
 app.use(express.static("public"));
 
-const delayTimeInMinutes = 5; // 4 minutes delay 
+const delayTimeInMinutes = 6; // 6 minutes delay 
 
 // Queue to store incoming requests
 const requestQueue = [];
@@ -73,12 +73,8 @@ const processQueue = () => {
 
 try {
   app.get("/", async (req, res) => {
-    const alive = req.query.alive || 1;
-  
-    if (alive == 1) {
-      res.json({Status: "Alive"});
-      return;
-    }
+    res.json({Status: "Alive"});
+    return;
   });
   
   // API endpoint to receive requests
