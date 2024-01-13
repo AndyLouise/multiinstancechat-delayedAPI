@@ -1,11 +1,38 @@
-const express = require('express');
-const axios = require('axios');
+// Includes
+"use strict";
+require("dotenv").config({ path: require("find-config")(".env") });
+const cors = require("cors");
+const express = require("express");
+const nocache = require("nocache");
 const app = express();
-const PORT = 3000;
-const delayTimeInMinutes = 5; // 4 minutes delay 
+const axios = require('axios');
 
-// Middleware to parse JSON requests
+// Config
+
+let config = {
+  dataFormat: process.env.DATA_FORMAT || "json",
+  keepArtifacts:
+    process.env.KEEP_ARTIFACTS?.toLowerCase().trim() === "true" ? true : false,
+  port: process.env.PORT || 3000
+};
+
+console.log("--------------------------------");
+console.log(`| Multi-Instance Chat -  Delayed API`);
+console.log("--------------------------------");
+console.log(`| PORT: ${config.port}`);
+console.log(`| FORMAT: ${config.dataFormat}`);
+console.log(`| KEEP ARTIFACTS: ${config.keepArtifacts}`);
+console.log("--------------------------------");
+
+// Init
+app.use(cors());
+app.use(nocache());
 app.use(express.json());
+app.engine("html", require("ejs").renderFile);
+app.listen(config.port);
+app.use(express.static("public"));
+
+const delayTimeInMinutes = 5; // 4 minutes delay 
 
 // Queue to store incoming requests
 const requestQueue = [];
