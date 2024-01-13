@@ -85,10 +85,19 @@ try {
   app.get('/enqueue', async (req, res) => {
     try {
       const number = req.query.n || null;
+      const auth = req.query.auth || null;
+      const authKey = process.env['MASTER_KEY'];
       if(number == null) {
-        res.end("Bad Request");
+        res.json({Error: "Bad Request"});
         return;
       }
+      // ensure only multi instance chat API can call this, for safety reasons
+      if (auth == null || auth != authKey)
+      {
+        res.status(403).send("Access Forbidden: Invalid authentication key");
+        return;
+      }
+      
       requestQueue.push({ number });
       console.log(`Enqueued player removal: ${number}`);
       processQueue();
@@ -97,11 +106,8 @@ try {
       console.log("Error:", error)
     }
   });
-  
-  app.listen(PORT, () => {
-      console.log(`API server is running on port ${PORT}`);
-  });
 } catch (error) {
   console.log(error);
+  res.json({Error: "There was an issue while processing this request, please try again"});
 }
 
